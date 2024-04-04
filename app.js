@@ -1,22 +1,50 @@
-require('./models/db.js');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var bagsRouter = require('./routes/bags.router.js');
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+require('./models/db');
+const express = require('express');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const mongoSanitize = require('express-mongo-sanitize');
+const compression = require('compression');
+const cors = require('cors');
+const passport = require('passport');
+const logger = require('morgan');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const { jwtStrategy } = require('./config/passport.config');
+const indexRouter = require('./routes/index');
+const authRouter = require('./routes/auth.router');
+const bagsRouter = require('./routes/bags.router.js');
+const usersRouter = require('./routes/users.router');
 
-var app = express();
+// Initialize express app
+const app = express();
 
+// Middlewares
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cookieParser());
 
+// Security Middleware
+app.use(helmet());
+app.use(xss());
+app.use(mongoSanitize());
+
+// Compression Middleware
+app.use(compression());
+
+// CORS Middleware
+app.use(cors());
+app.options('*', cors());
+
+// Passport Middleware
+app.use(passport.initialize());
+passport.use('jwt', jwtStrategy);
+
+// Routes
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/auth', authRouter);
 app.use('/bags', bagsRouter);
+app.use('/users', usersRouter);
 
 module.exports = app;

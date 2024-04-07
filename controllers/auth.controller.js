@@ -2,9 +2,19 @@
 const httpStatus = require('http-status');
 const { authService, userService, tokenService, emailService } = require('../services');
 
-const register = async (req, res) => {
+const registerUser = async (req, res) => {
   try {
     const user = await userService.createUser(req.body);
+    const tokens = await tokenService.generateAuthTokens(user);
+    res.status(httpStatus.CREATED).send({ user, tokens });
+  } catch (error) {
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error: error.message });
+  }
+};
+
+const registerEstablishmentOwner = async (req, res) => {
+  try {
+    const user = await userService.createUser({ ...req.body, role: 'establishment-owner' });
     const tokens = await tokenService.generateAuthTokens(user);
     res.status(httpStatus.CREATED).send({ user, tokens });
   } catch (error) {
@@ -80,7 +90,8 @@ const verifyEmail = async (req, res) => {
 };
 
 module.exports = {
-  register,
+  registerUser,
+  registerEstablishmentOwner,
   login,
   logout,
   refreshTokens,

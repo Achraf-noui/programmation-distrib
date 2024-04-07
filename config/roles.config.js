@@ -1,5 +1,6 @@
 const allRoles = {
   user: [],
+  establishment_owner: ['manageEstablishment', 'create_establishment'],
   admin: ['getUsers', 'manageUsers'],
 };
 

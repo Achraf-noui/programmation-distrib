@@ -18,23 +18,19 @@ const userSchema = new Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      validate(value) {
-        if (!validator.isEmail(value)) {
-          throw new Error('Invalid email');
-        }
-      },
+      validate: [validator.isEmail, 'Invalid email'],
     },
     password: {
       type: String,
       required: true,
       trim: true,
       minlength: 8,
-      validate(value) {
-        if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-          throw new Error('Password must contain at least one letter and one number');
-        }
-      },
-      private: true,
+      validate: [
+        {
+          validator: (value) => /\d/.test(value) && /[a-zA-Z]/.test(value),
+          message: 'Password must contain at least one letter and one number',
+        },
+      ],
     },
     role: {
       type: String,
@@ -45,36 +41,33 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    establishment: {
+      type: Schema.Types.ObjectId,
+      ref: 'Establishment',
+    },
   },
   {
     timestamps: true,
   },
 );
 
+// Static method to check if email is already taken
 userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;
 };
 
-/**
- * Check if password matches the user's password
- * @param {string} password
- * @returns {Promise<boolean>}
- */
+// Method to compare password with user's password
 userSchema.methods.isPasswordMatch = async function (password) {
-  const user = this;
-  return bcrypt.compare(password, user.password);
+  return bcrypt.compare(password, this.password);
 };
 
+// Pre-save hook to hash password
 userSchema.pre('save', async function (next) {
-  const user = this;
-  if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 8);
+  if (this.isModified('password')) {
+    this.password = await bcrypt.hash(this.password, 8);
   }
   next();
 });
 
-/**
- * @typedef User
- */
 module.exports = mongoose.model('User', userSchema);

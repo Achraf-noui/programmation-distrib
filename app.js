@@ -14,6 +14,7 @@ const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth.router');
 const bagsRouter = require('./routes/bags.router.js');
 const usersRouter = require('./routes/users.router');
+const establishmentsRouter = require('./routes/establishments.router');
 
 // Initialize express app
 const app = express();
@@ -46,5 +47,6 @@ app.use('/', indexRouter);
 app.use('/auth', authRouter);
 app.use('/bags', bagsRouter);
 app.use('/users', usersRouter);
+app.use('/establishments', establishmentsRouter);
 
 module.exports = app;

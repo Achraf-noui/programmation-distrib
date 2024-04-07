@@ -18,6 +18,7 @@ const envVarsSchema = Joi.object()
     JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: Joi.number()
       .default(10)
       .description('minutes after which verify email token expires'),
+    GOOGLE_PLACES_API: Joi.string().required().description('Google API key'),
   })
   .unknown();
 
@@ -45,4 +46,5 @@ module.exports = {
     resetPasswordExpirationMinutes: envVars.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
     verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
   },
+  googlePlaces: envVars.GOOGLE_PLACES_API,
 };

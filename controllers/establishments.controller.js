@@ -5,7 +5,7 @@ const { fetchEstablishmentById, fetchMedia } = require('../api/GooglePlaces');
 
 const getAllEstablishments = async (req, res) => {
   try {
-    const establishments = await Establishment.find();
+    const establishments = await Establishment.find().populate('bags');
     res.status(httpStatus.OK).json(establishments);
   } catch (error) {
     res.status(httpStatus.BAD_REQUEST).json({ error: error.message });

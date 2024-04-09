@@ -3,12 +3,11 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const bagSchema = new Schema({
-  businessId: { type: String },
   name: { type: String },
-  bagDescription: { type: String },
-  price: { type: Number, required: true },
+  description: { type: String },
+  price: { type: Number, requiered: true },
   collectTime: { type: Date },
-  status: { type: String },
+  establishmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Establishment', requiered: true }
 });
 
 module.exports = mongoose.model('Bag', bagSchema);

@@ -10,7 +10,7 @@ const router = express.Router();
 router.get('/', establishmentController.getAllEstablishments);
 
 // Register a new establishment
-router.post('/', auth(['create_establishment']), validate(establishmentValidation.registerEstablishment), establishmentController.fetchAndCreateEstablishment);
+router.post('/', auth('create_establishment'), validate(establishmentValidation.registerEstablishment), establishmentController.fetchAndCreateEstablishment);
 
 // Fetch an establishment by ID
 router.get('/:establishmentId', auth(['admin', 'establishment_owner']), establishmentController.getEstablishmentById);

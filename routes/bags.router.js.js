@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bagsController = require('../controllers/bags.controller');
+const auth = require('../middlewares/auth');
 
 router.route('/:establishmentID/bags')
     .get(bagsController.getAllBags)

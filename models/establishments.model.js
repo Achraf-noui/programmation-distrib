@@ -12,6 +12,17 @@ const establishmentSchema = new mongoose.Schema(
       required: false,
       trim: true,
     },
+    location: {
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point'
+      },
+      coordinates: {
+        type: [Number], // Array of numbers: [longitude, latitude]
+        index: '2dsphere' // Ensure indexing for geospatial queries
+      }
+    },
     photos: {
       type: [String], // Array of photo URLs or file paths
       default: [],

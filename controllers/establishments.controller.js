@@ -34,12 +34,19 @@ const fetchAndCreateEstablishment = async (req, res) => {
     });
     const photos = await Promise.all(photosPromises);
 
+    console.log(establishmentData.name);
+    console.log(establishmentData.location);
+
     // Extract relevant establishment details
     const establishment = await Establishment.create({
       name: establishmentData.displayName.text,
       googlePlaceId: establishmentData.id,
       photos,
       address: establishmentData.formattedAddress,
+      location: {
+        type: 'Point',
+        coordinates: [establishmentData.location.longitude, establishmentData.location.latitude]
+      },
       owner: req.user.id,
     });
 

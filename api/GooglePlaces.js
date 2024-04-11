@@ -3,7 +3,7 @@ const config = require('../config/config');
 
 const fetchEstablishmentById = async (placeId) => {
   try {
-    const response = await axios.get(`https://places.googleapis.com/v1/places/${placeId}?fields=id,displayName,photos,formattedAddress&key=${config.googlePlaces}`);
+    const response = await axios.get(`https://places.googleapis.com/v1/places/${placeId}?fields=id,displayName,photos,location,formattedAddress&key=${config.googlePlaces}`);
     return response.data;
   } catch (error) {
     throw new Error('Error fetching establishment details', error);

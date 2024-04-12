@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "SET NODE_ENV=prod&& nodemon ./bin/www",
-    "start:local": "SET NODE_ENV=local&& nodemon ./bin/www",
+    "start:local": "SET NODE_ENV=development&& nodemon ./bin/www",
     "startMAC:local": "NODE_ENV=local&& nodemon ./bin/www",
     "startMAC": "NODE_ENV=prod ./bin/www",
     "lint": "eslint .",

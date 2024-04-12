@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+// const Bag = require('./bags.model').schema;
 
 const establishmentSchema = new mongoose.Schema(
   {
@@ -21,11 +22,13 @@ const establishmentSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    bags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Bag" }]
   },
   {
     timestamps: true,
   },
 );
+
 
 const Establishment = mongoose.model('Establishment', establishmentSchema);
 

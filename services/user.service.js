@@ -17,6 +17,8 @@ const createUser = async (userBody) => {
   // Create a new user object
   const newUser = new User(userBody);
 
+  User.register(newUser, userBody.password);
+
   // Save the user object to the database
   await newUser.save();
 

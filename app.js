@@ -10,12 +10,14 @@ const logger = require('morgan');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const { jwtStrategy } = require('./config/passport.config');
+const LocalStrategy = require('passport-local');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth.router');
 const bagsRouter = require('./routes/bags.router.js');
 const usersRouter = require('./routes/users.router');
 const establishmentsRouter = require('./routes/establishments.router');
 const ordersRouter = require('./routes/orders.router');
+const User = require('./models/users.model.js')
 
 // Initialize express app
 const app = express();

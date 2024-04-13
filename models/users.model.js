@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcrypt');
 const { roles } = require('../config/roles.config');
+var passportLocalMongoose = require('passport-local-mongoose'); 
 
 const { Schema } = mongoose;
 
@@ -20,18 +21,18 @@ const userSchema = new Schema(
       lowercase: true,
       validate: [validator.isEmail, 'Invalid email'],
     },
-    password: {
-      type: String,
-      required: true,
-      trim: true,
-      minlength: 8,
-      validate: [
-        {
-          validator: (value) => /\d/.test(value) && /[a-zA-Z]/.test(value),
-          message: 'Password must contain at least one letter and one number',
-        },
-      ],
-    },
+    // password: {
+    //   type: String,
+    //   required: true,
+    //   trim: true,
+    //   minlength: 8,
+    //   validate: [
+    //     {
+    //       validator: (value) => /\d/.test(value) && /[a-zA-Z]/.test(value),
+    //       message: 'Password must contain at least one letter and one number',
+    //     },
+    //   ],
+    // },
     role: {
       type: String,
       enum: roles,
@@ -51,23 +52,17 @@ const userSchema = new Schema(
   },
 );
 
+//plugin Passport-Local Mongoose into schema
+userSchema.plugin(passportLocalMongoose, {usernameField: "email"});
+
 // Static method to check if email is already taken
 userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;
 };
 
-// Method to compare password with user's password
-userSchema.methods.isPasswordMatch = async function (password) {
-  return bcrypt.compare(password, this.password);
-};
-
-// Pre-save hook to hash password
-userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 8);
-  }
-  next();
-});
+// userSchema.methods.authenticate = function (password) {
+//   return this.constructor.authenticate()(this.email, password);
+// };
 
 module.exports = mongoose.model('User', userSchema);

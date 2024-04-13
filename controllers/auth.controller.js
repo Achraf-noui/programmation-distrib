@@ -1,6 +1,8 @@
 /* eslint-disable object-curly-newline */
 const httpStatus = require('http-status');
-const { authService, userService, tokenService, emailService } = require('../services');
+const passport = require('passport');
+const { authService, userService, tokenService } = require('../services');
+const emailService = require('../services/email.service')
 
 const registerUser = async (req, res) => {
   try {
@@ -24,12 +26,23 @@ const registerEstablishmentOwner = async (req, res) => {
 
 const login = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const user = await authService.loginUserWithEmailAndPassword(email, password);
-    const tokens = await tokenService.generateAuthTokens(user);
-    res.send({ user, tokens });
+    passport.authenticate("local", async function (err, user, info) {
+      if (err) {
+        res.json({ success: false, message: err });
+      }
+      else {
+        if (!user) {
+          console.log(user);
+          res.json({ success: false, message: "email or password incorrect" });
+        }
+        else {
+          const tokens = await tokenService.generateAuthTokens(user);
+          res.send({ user, tokens });
+        }
+      }
+    })(req, res);
   } catch (error) {
-    res.status(httpStatus.UNAUTHORIZED).send({ error: error.message });
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
   }
 };
 
@@ -55,7 +68,7 @@ const forgotPassword = async (req, res) => {
   try {
     const resetPasswordToken = await tokenService.generateResetPasswordToken(req.body.email);
     await emailService.sendResetPasswordEmail(req.body.email, resetPasswordToken);
-    res.status(httpStatus.NO_CONTENT).send();
+    res.status(200).json({resetPasswordToken: resetPasswordToken});
   } catch (error) {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error: error.message });
   }
@@ -64,7 +77,7 @@ const forgotPassword = async (req, res) => {
 const resetPassword = async (req, res) => {
   try {
     await authService.resetPassword(req.query.token, req.body.password);
-    res.status(httpStatus.NO_CONTENT).send();
+    res.status(200).json({message: "Your password has been updated successfully"});
   } catch (error) {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error: error.message });
   }
@@ -74,7 +87,7 @@ const sendVerificationEmail = async (req, res) => {
   try {
     const verifyEmailToken = await tokenService.generateVerifyEmailToken(req.user);
     await emailService.sendVerificationEmail(req.user.email, verifyEmailToken);
-    res.status(httpStatus.NO_CONTENT).send();
+    res.status(httpStatus.OK).json({verifyEmailToken: verifyEmailToken});
   } catch (error) {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error: error.message });
   }
@@ -83,7 +96,7 @@ const sendVerificationEmail = async (req, res) => {
 const verifyEmail = async (req, res) => {
   try {
     await authService.verifyEmail(req.query.token);
-    res.status(httpStatus.NO_CONTENT).send();
+    res.status(httpStatus.OK).send({ message: "Email successfully verified" });
   } catch (error) {
     res.status(httpStatus.INTERNAL_SERVER_ERROR).send({ error: error.message });
   }

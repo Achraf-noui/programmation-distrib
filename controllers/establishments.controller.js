@@ -120,10 +120,171 @@ const deleteEstablishment = async (req, res) => {
   return null;
 };
 
+const addRating = async (req, res) => {
+  const { establishmentId } = req.params;
+  const { rating } = req.body;
+  const userId = req.user._id; // Assuming user ID is stored in req.user.id after authentication
+
+  try {
+    const establishment = await Establishment.findById(establishmentId);
+    if (!establishment) {
+      return res.status(404).json({ message: 'Establishment not found' });
+    }
+
+    // Add rating to establishment's ratings array along with user ID
+    establishment.ratings.push({ user: userId, rating });
+    await establishment.save();
+
+    res.json({ message: 'Rating added successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const addReview = async (req, res) => {
+  const { establishmentId } = req.params;
+  const { review } = req.body;
+  const userId = req.user.id; // Assuming user ID is stored in req.user.id after authentication
+
+  try {
+    const establishment = await Establishment.findById(establishmentId);
+    if (!establishment) {
+      return res.status(404).json({ message: 'Establishment not found' });
+    }
+
+    // Add review to establishment's reviews array along with user ID
+    establishment.reviews.push({ user: userId, review });
+    await establishment.save();
+
+    res.json({ message: 'Review added successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+const getAllRatings = async (req, res) => {
+  const { establishmentId } = req.params;
+
+  try {
+    const establishment = await Establishment.findById(establishmentId);
+    if (!establishment) {
+      return res.status(404).json({ message: 'Establishment not found' });
+    }
+
+    res.json(establishment.ratings);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// method to get a single rating by ID
+const getRatingById = async (req, res) => {
+  const { establishmentId, ratingId } = req.params;
+
+  try {
+    const establishment = await Establishment.findById(establishmentId);
+    if (!establishment) {
+      return res.status(404).json({ message: 'Establishment not found' });
+    }
+
+    const rating = establishment.ratings.id(ratingId);
+    if (!rating) {
+      return res.status(404).json({ message: 'Rating not found' });
+    }
+
+    res.json(rating);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// method to delete a single rating by ID
+const deleteRatingById = async (req, res) => {
+  const { establishmentId, ratingId } = req.params;
+
+  try {
+    const establishment = await Establishment.findById(establishmentId);
+    if (!establishment) {
+      return res.status(404).json({ message: 'Establishment not found' });
+    }
+
+    establishment.ratings.pull(ratingId);
+    await establishment.save();
+
+    res.json({ message: 'Rating deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// method to get all reviews of an establishment
+const getAllReviews = async (req, res) => {
+  const { establishmentId } = req.params;
+
+  try {
+    const establishment = await Establishment.findById(establishmentId);
+    if (!establishment) {
+      return res.status(404).json({ message: 'Establishment not found' });
+    }
+
+    res.json(establishment.reviews);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+//method to get a single review by ID
+const getReviewById = async (req, res) => {
+  const { establishmentId, reviewId } = req.params;
+
+  try {
+    const establishment = await Establishment.findById(establishmentId);
+    if (!establishment) {
+      return res.status(404).json({ message: 'Establishment not found' });
+    }
+
+    const review = establishment.reviews.id(reviewId);
+    if (!review) {
+      return res.status(404).json({ message: 'Review not found' });
+    }
+
+    res.json(review);
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
+// method to delete a single review by ID
+const deleteReviewById = async (req, res) => {
+  const { establishmentId, reviewId } = req.params;
+
+  try {
+    const establishment = await Establishment.findById(establishmentId);
+    if (!establishment) {
+      return res.status(404).json({ message: 'Establishment not found' });
+    }
+
+    establishment.reviews.pull(reviewId);
+    await establishment.save();
+
+    res.json({ message: 'Review deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Internal server error' });
+  }
+};
+
 module.exports = {
   getAllEstablishments,
   fetchAndCreateEstablishment,
   updateEstablishment,
   deleteEstablishment,
   getEstablishmentById,
+  addRating,
+  addReview,
+  getAllRatings,
+  getAllReviews,
+  getRatingById,
+  getReviewById,
+  deleteRatingById,
+  deleteReviewById
 };

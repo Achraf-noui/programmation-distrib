@@ -5,12 +5,12 @@ const auth = require('../middlewares/auth');
 
 router.route('/:establishmentID/bags')
     .get(bagsController.getAllBags)
-    .post(bagsController.addOneBag)
-    .delete(bagsController.deleteAllBags);
+    .post(auth('bag_auth'), bagsController.addOneBag)
+    .delete(auth('bag_auth'), bagsController.deleteAllBags);
 
 router.route('/:establishmentID/bags/:bagID')
     .get(bagsController.getOneBag)
-    .put(bagsController.updateOneBag)
-    .delete(bagsController.deleteOneBag);
+    .put(auth('bag_auth'), bagsController.updateOneBag)
+    .delete(auth('bag_auth'), bagsController.deleteOneBag);
 
 module.exports = router;

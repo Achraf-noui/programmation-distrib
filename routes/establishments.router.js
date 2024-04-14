@@ -13,12 +13,26 @@ router.get('/', establishmentController.getAllEstablishments);
 router.post('/', auth('create_establishment'), validate(establishmentValidation.registerEstablishment), establishmentController.fetchAndCreateEstablishment);
 
 // Fetch an establishment by ID
-router.get('/:establishmentId', auth(['admin', 'establishment_owner']), establishmentController.getEstablishmentById);
+router.get('/:establishmentId', establishmentController.getEstablishmentById);
 
 // Update an establishment by ID
 router.patch('/:establishmentId', auth(['admin', 'establishment_owner']), validate(establishmentValidation.updateEstablishment), establishmentController.updateEstablishment);
 
 // Delete an establishment by ID
 router.delete('/:establishmentId', auth(['admin', 'establishment_owner']), establishmentController.deleteEstablishment);
+
+// Add ratings and reviews
+
+// Routes for ratings
+router.post('/:establishmentId/ratings', auth('reviews_rating_auth'), establishmentController.addRating);
+router.get('/:establishmentId/ratings', establishmentController.getAllRatings);
+router.get('/:establishmentId/ratings/:ratingId', establishmentController.getRatingById);
+router.delete('/:establishmentId/ratings/:ratingId', auth('reviews_rating_auth'), establishmentController.deleteRatingById);
+
+// Routes for reviews
+router.post('/:establishmentId/reviews', auth('reviews_rating_auth'), establishmentController.addReview);
+router.get('/:establishmentId/reviews', establishmentController.getAllReviews);
+router.get('/:establishmentId/reviews/:reviewId', establishmentController.getReviewById);
+router.delete('/:establishmentId/reviews/:reviewId', auth('reviews_rating_auth'), establishmentController.deleteReviewById);
 
 module.exports = router;

@@ -33,7 +33,15 @@ const establishmentSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    bags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Bag" }]
+    bags: [{ type: mongoose.Schema.Types.ObjectId, ref: "Bag" }],
+    ratings: [{
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      rating: { type: Number }
+    }],
+    reviews: [{
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      review: { type: String }
+    }]
   },
   {
     timestamps: true,

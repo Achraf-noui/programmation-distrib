@@ -1,6 +1,7 @@
 const httpStatus = require('http-status');
 const Bag = require('../models/bags.model');
 const Establishment = require('../models/establishments.model');
+const {getNutrientsByDishName} = require('../api/spoonacular')
 
 const controller = {
   getAllBags: async (req, res, next) => {
@@ -28,9 +29,21 @@ const controller = {
         return res.status(404).json({ message: 'Establishment Not Found' });
       }
 
+      const nutrientsData = await getNutrientsByDishName(req.body.name);
+
+      const { calories, fat, protein } = nutrientsData;
+
+      // Construct the `nutrients` object from the extracted data
+      const nutrients = {
+        calories: calories.value,
+        fat: fat.value,
+        protein: protein.value
+      };
+
       const newBag = new Bag({
         ...req.body,
-        establishmentId: establishmentID
+        establishmentId: establishmentID,
+        nutrients: nutrients
       });
 
       establishment.bags.push(newBag._id);

@@ -1,5 +1,6 @@
 const httpStatus = require('http-status');
 const Order = require('../models/orders.model');
+const Bag = require('../models/bags.model')
 
 const controller = {
 
@@ -19,7 +20,22 @@ const controller = {
     placeOrder: async (req, res, next) => {
         try {
 
-            console.log(req.user);
+            const { cartBags } = req.body;
+            for (const item of cartBags) {
+
+                const bag = await Bag.findById(item.bag);
+
+                if (!bag) {
+                    return res.status(httpStatus.NOT_FOUND).json({message: "bag " +item.bag+ " does not exist"});
+                }else if (item.quantity > bag.quantity){
+                    return res.status(httpStatus.BAD_REQUEST).json({message: 'Invalid quantity in order'});
+                }
+
+                bag.quantity = bag.quantity - item.quantity
+
+                await bag.save();
+
+            }
             const newOrder = new Order({
                 user: req.user._id,
                 cartBags: req.body.cartBags,
@@ -95,7 +111,7 @@ const controller = {
                 return res.status(httpStatus.NOT_FOUND).json({ message: 'Order not found' });
             }
 
-            res.status(httpStatus.NO_CONTENT).json({message: "Order deleted successfully"});
+            res.status(httpStatus.NO_CONTENT).json({ message: "Order deleted successfully" });
         } catch (error) {
             console.error(error);
             next(error);

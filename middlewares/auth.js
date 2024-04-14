@@ -15,7 +15,6 @@ const verifyCallback = (req, resolve, reject, requiredRights) => async (err, use
     
     // eslint-disable-next-line max-len
     const hasRequiredRights = requiredRights.every((requiredRight) => userRights.includes(requiredRight))
-    console.log(hasRequiredRights);
     if (!hasRequiredRights && user.role !== 'admin') {
       return reject(new ApiError(httpStatus.FORBIDDEN, 'Forbidden'));
     }

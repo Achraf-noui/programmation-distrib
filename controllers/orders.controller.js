@@ -8,7 +8,6 @@ const controller = {
         try {
             const orders = await Order.find({ user: req.user._id })
                 .populate("cartBags.bag")
-            // .populate("user");
 
             res.status(200).json(orders);
         } catch (error) {

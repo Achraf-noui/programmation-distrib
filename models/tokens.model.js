@@ -34,8 +34,4 @@ const tokenSchema = new Schema(
   },
 );
 
-/**
- * @typedef Token
- */
-
 module.exports = mongoose.model('Token', tokenSchema);

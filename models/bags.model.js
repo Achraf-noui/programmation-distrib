@@ -7,6 +7,12 @@ const bagSchema = new Schema({
   description: { type: String },
   price: { type: Number, requiered: true },
   collectTime: { type: Date },
+  nutrients: {
+    calories: { type: Number },
+    carbs: { type: Number },
+    protein: { type: Number },
+    fat: { type: Number }
+  },
   establishmentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Establishment', requiered: true }
 });
 

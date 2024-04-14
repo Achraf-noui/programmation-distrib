@@ -19,6 +19,7 @@ const envVarsSchema = Joi.object()
       .default(10)
       .description('minutes after which verify email token expires'),
     GOOGLE_PLACES_API: Joi.string().required().description('Google API key'),
+    SPOONACULAR_API: Joi.string().required().description('Spoonacular API key'),
   })
   .unknown();
 
@@ -47,4 +48,5 @@ module.exports = {
     verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
   },
   googlePlaces: envVars.GOOGLE_PLACES_API,
+  spoonacular: envVars.SPOONACULAR_API
 };

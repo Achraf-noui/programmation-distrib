@@ -26,8 +26,14 @@ const controller = {
                 const bag = await Bag.findById(item.bag);
 
                 if (!bag) {
-                    res.status(httpStatus.NOT_FOUND).json({error: "bag " +item.bag+ " does not exist"})
+                    return res.status(httpStatus.NOT_FOUND).json({message: "bag " +item.bag+ " does not exist"});
+                }else if (item.quantity > bag.quantity){
+                    return res.status(httpStatus.BAD_REQUEST).json({message: 'Invalid quantity in order'});
                 }
+
+                bag.quantity = bag.quantity - item.quantity
+
+                await bag.save();
 
             }
             const newOrder = new Order({

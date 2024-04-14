@@ -16,7 +16,7 @@ const registerUser = async (req, res) => {
 
 const registerEstablishmentOwner = async (req, res) => {
   try {
-    const user = await userService.createUser({ ...req.body, role: 'establishment-owner' });
+    const user = await userService.createUser({ ...req.body, role: 'owner' });
     const tokens = await tokenService.generateAuthTokens(user);
     res.status(httpStatus.CREATED).send({ user, tokens });
   } catch (error) {

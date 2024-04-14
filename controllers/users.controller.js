@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const { userService } = require('../services');
+const Establishment = require('../models/establishments.model');
 
 const createUser = async (req, res) => {
   try {
@@ -53,10 +54,31 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const getEstablishmentByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // Find establishments with the owner field equal to userID
+    const establishments = await Establishment.find({ owner: userId });
+
+    // Check if any establishments are found
+    if (!establishments.length) {
+      return res.status(httpStatus.NOT_FOUND).json({ error: 'No establishments found for this user' });
+    }
+
+    res.status(httpStatus.OK).json(establishments);
+  } catch (error) {
+    res.status(httpStatus.BAD_REQUEST).json({ error: error.message });
+  }
+};
+
+
+
 module.exports = {
   createUser,
   getUsers,
   getUser,
   updateUser,
   deleteUser,
+  getEstablishmentByUserId
 };

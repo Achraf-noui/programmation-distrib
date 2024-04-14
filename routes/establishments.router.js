@@ -16,10 +16,10 @@ router.post('/', auth('create_establishment'), validate(establishmentValidation.
 router.get('/:establishmentId', establishmentController.getEstablishmentById);
 
 // Update an establishment by ID
-router.patch('/:establishmentId', auth(['admin', 'establishment_owner']), validate(establishmentValidation.updateEstablishment), establishmentController.updateEstablishment);
+router.patch('/:establishmentId', auth(), validate(establishmentValidation.updateEstablishment), establishmentController.updateEstablishment);
 
 // Delete an establishment by ID
-router.delete('/:establishmentId', auth(['admin', 'establishment_owner']), establishmentController.deleteEstablishment);
+router.delete('/:establishmentId', auth(), establishmentController.deleteEstablishment);
 
 // Add ratings and reviews
 

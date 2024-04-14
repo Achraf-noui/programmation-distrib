@@ -10,7 +10,7 @@ const logger = require('morgan');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const { jwtStrategy } = require('./config/passport.config');
-const LocalStrategy = require('passport-local');
+const { rateLimiter } = require('./middlewares/rateLimiter');
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth.router');
 const bagsRouter = require('./routes/bags.router.js');
@@ -44,6 +44,7 @@ app.options('*', cors());
 // Passport Middleware
 app.use(passport.initialize());
 passport.use('jwt', jwtStrategy);
+app.use('/auth', rateLimiter);
 
 // Routes
 app.use('/', indexRouter);

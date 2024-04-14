@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-// const Bag = require('./bags.model').schema;
 
 const establishmentSchema = new mongoose.Schema(
   {
@@ -25,7 +24,7 @@ const establishmentSchema = new mongoose.Schema(
       }
     },
     photos: {
-      type: [String], // Array of photo URLs or file paths
+      type: [String],
       default: [],
     },
     owner: {

@@ -1,6 +1,6 @@
 const allRoles = {
-  user: ['order_auth'],
-  establishment_owner: ['manageEstablishment', 'create_establishment'],
+  user: ['order_auth', 'reviews_rating_auth'],
+  establishment_owner: ['manageEstablishment', 'create_establishment', 'bag_auth'],
   admin: ['getUsers', 'manageUsers'],
 };
 

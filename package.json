@@ -3,13 +3,43 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "SET NODE_ENV=prod&& nodemon ./bin/www",
+    "start:local": "SET NODE_ENV=development&& nodemon ./bin/www",
+    "startMAC:local": "NODE_ENV=local&& nodemon ./bin/www",
+    "startMAC": "NODE_ENV=prod ./bin/www",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier --check **/*.js",
+    "prettier:fix": "prettier --write **/*.js"
   },
   "dependencies": {
+    "axios": "^1.6.8",
+    "bcrypt": "^5.1.1",
+    "compression": "^1.7.4",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "morgan": "~1.9.1"
+    "express-mongo-sanitize": "^2.0.0",
+    "express-rate-limit": "^5.5.1",
+    "express-session": "^1.18.0",
+    "helmet": "^4.1.0",
+    "http-status": "^1.7.4",
+    "jade": "^1.11.0",
+    "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "mkcert": "^3.2.0",
+    "moment": "^2.24.0",
+    "mongoose": "^8.2.3",
+    "morgan": "~1.9.1",
+    "nodemailer": "^6.3.1",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^8.0.0",
+    "pm2": "^5.1.0",
+    "swagger-jsdoc": "^6.0.8",
+    "validator": "^13.11.0",
+    "xss-clean": "^0.1.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

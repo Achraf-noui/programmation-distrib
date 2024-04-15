@@ -39,3 +39,5 @@ The ResQMEals App is a web application that helps users discover establishments 
 
    ```bash
    git clone https://github.com/yourusername/establishment-finder-app.git
+
+### For detailed API documentation, please refer to the [API documentation](https://documenter.getpostman.com/view/12168392/2sA3Bj7tn3#intro).

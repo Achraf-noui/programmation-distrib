@@ -6,7 +6,8 @@
 
 var app = require('../app');
 var debug = require('debug')('backend:server');
-var http = require('http');
+const https = require('https');
+const fs = require('fs');
 
 /**
  * Get port from environment and store in Express.
@@ -16,10 +17,16 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTPS server.
  */
 
-var server = http.createServer(app);
+const options = {
+  key: fs.readFileSync('./key.pem'), // Path to your private key
+  cert: fs.readFileSync('./cert.pem'), // Path to your SSL certificate
+  passphrase: 'noui',
+};
+
+const server = https.createServer(options, app);
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -50,7 +57,7 @@ function normalizePort(val) {
 }
 
 /**
- * Event listener for HTTP server "error" event.
+ * Event listener for HTTPS server "error" event.
  */
 
 function onError(error) {
@@ -58,9 +65,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -78,14 +83,12 @@ function onError(error) {
 }
 
 /**
- * Event listener for HTTP server "listening" event.
+ * Event listener for HTTPS server "listening" event.
  */
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  console.log("Listening on: http://localhost:" + port);
+  console.log('Listening on: https://localhost:' + port);
 }

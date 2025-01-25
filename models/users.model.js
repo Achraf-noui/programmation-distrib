@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const validator = require('validator');
-const bcrypt = require('bcrypt');
 const { roles } = require('../config/roles.config');
 var passportLocalMongoose = require('passport-local-mongoose'); 
 

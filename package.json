@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "SET NODE_ENV=prod&& nodemon ./bin/www",
+    "start": "NODE_ENV=prod&& node ./bin/www",
     "start:local": "SET NODE_ENV=development&& nodemon ./bin/www",
     "startMAC:local": "NODE_ENV=local&& nodemon ./bin/www",
     "startMAC": "NODE_ENV=prod ./bin/www",
@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "axios": "^1.6.8",
-    "bcrypt": "^5.1.1",
     "compression": "^1.7.4",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",

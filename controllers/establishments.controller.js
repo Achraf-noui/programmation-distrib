@@ -3,12 +3,48 @@ const Establishment = require('../models/establishments.model');
 
 const { fetchEstablishmentById, fetchMedia } = require('../api/GooglePlaces');
 
+// Sample static data for establishments
+const staticEstablishments = [
+  {
+    _id: '1',
+    name: 'Establishment One',
+    address: '123 Main St, City, Country',
+    location: {
+      type: 'Point',
+      coordinates: [-73.935242, 40.730610], // Example coordinates (longitude, latitude)
+    },
+    photos: ['photo1_url', 'photo2_url'],
+    owner: 'ownerId1', // Example owner id
+    bags: [],
+    ratings: [],
+    reviews: [],
+  },
+  {
+    _id: '2',
+    name: 'Establishment Two',
+    address: '456 Elm St, City, Country',
+    location: {
+      type: 'Point',
+      coordinates: [-74.935242, 41.730610],
+    },
+    photos: ['photo1_url'],
+    owner: 'ownerId2', // Example owner id
+    bags: [],
+    ratings: [],
+    reviews: [],
+  },
+  // Add more static establishments as needed
+];
+
 const getAllEstablishments = async (req, res) => {
   try {
-    const establishments = await Establishment.find().populate('bags');
-    res.status(httpStatus.OK).json(establishments);
+    // Return the static data instead of fetching from the database
+    res.status(httpStatus.OK).json(staticEstablishments);
+    console.log("here");
+    
   } catch (error) {
     res.status(httpStatus.BAD_REQUEST).json({ error: error.message });
+    console.log("here");
   }
 };
 

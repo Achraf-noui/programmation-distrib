@@ -6,8 +6,7 @@
 
 var app = require('../app');
 var debug = require('debug')('backend:server');
-const https = require('https');
-const fs = require('fs');
+const http = require('http'); // Change from https to http
 
 /**
  * Get port from environment and store in Express.
@@ -17,16 +16,10 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
- * Create HTTPS server.
+ * Create HTTP server (no SSL/TLS required).
  */
 
-const options = {
-  key: fs.readFileSync('./key.pem'), // Path to your private key
-  cert: fs.readFileSync('./cert.pem'), // Path to your SSL certificate
-  passphrase: 'noui',
-};
-
-const server = https.createServer(options, app);
+const server = http.createServer(app); // Use http.createServer instead of https.createServer
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -57,7 +50,7 @@ function normalizePort(val) {
 }
 
 /**
- * Event listener for HTTPS server "error" event.
+ * Event listener for HTTP server "error" event.
  */
 
 function onError(error) {
@@ -83,12 +76,12 @@ function onError(error) {
 }
 
 /**
- * Event listener for HTTPS server "listening" event.
+ * Event listener for HTTP server "listening" event.
  */
 
 function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  console.log('Listening on: https://localhost:' + port);
+  console.log('Listening on: http://localhost:' + port); // Update URL to HTTP
 }
